@@ -23,12 +23,9 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		
 		_player = new Player(20, 20);
-		add(_player);
-		
-		super.create();
-		
+		add(_player);	
+		super.create();		
 		
 	}
 	
@@ -50,12 +47,10 @@ class PlayState extends FlxState
 		var _left:Bool = false;
 		var _right:Bool = false;
 		
-		#if !FLX_NO_KEYBOARD
 		_up = FlxG.keys.anyPressed(["UP", "W"]);
 		_down = FlxG.keys.anyPressed(["DOWN", "S"]);
 		_left = FlxG.keys.anyPressed(["LEFT", "A"]);
 		_right = FlxG.keys.anyPressed(["RIGHT", "D"]);
-		#end
 		
 		if (_up && _down)
 			_up = _down = false;
@@ -87,23 +82,8 @@ class PlayState extends FlxState
 			else if (_right)
 				mA = 0;
 				
-			var v:FlxPoint = FlxAngle.rotatePoint(_player.Speed, 0, 0, 0, mA);
-			_player.velocity.x = v.x;
-			_player.velocity.y = v.y;
-			v = FlxDestroyUtil.put(v);
-		}
-		
-		if (!(_up || _down))
-			if (Math.abs(_player.velocity.y) >= _player.Friction)
-				_player.velocity.y *= _player.Friction;
-			else
-				_player.velocity.y = 0;
-		if (!(_left || _right))
-			if (Math.abs(_player.velocity.x) >= _player.Friction)
-				_player.velocity.x *= _player.Friction;
-			else
-				_player.velocity.x = 0;
-		
+			FlxAngle.rotatePoint(_player.Speed, 0, 0, 0, mA, _player.velocity);
+		}		
 	}
 	
 	/**

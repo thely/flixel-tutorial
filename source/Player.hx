@@ -7,12 +7,13 @@ class Player extends FlxSprite
 {
 
 	public var Speed:Float = 200;
-	public var Friction:Float = .6;
 	
 	public function new(X:Float=0, Y:Float=0) 
 	{
 		super(X, Y);
 		makeGraphic(16, 16, FlxColor.BLUE);
+		drag.x = drag.y = 1600;
+		
 	}
 	
 }
