@@ -39,7 +39,7 @@ class PlayState extends FlxState
 	}
 
 	
-	private function playerMovement():Void
+	private function userInput():Void
 	{
 		
 		var _up:Bool = false;
@@ -91,7 +91,7 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		playerMovement();
+		userInput();
 		
 		super.update();
 	}	
