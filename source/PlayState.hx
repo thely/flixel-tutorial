@@ -92,9 +92,8 @@ class PlayState extends FlxState
 				mA = 0;
 				_player.facing = FlxObject.RIGHT;
 			}
-				
-			FlxAngle.rotatePoint(_player.Speed, 0, 0, 0, mA, _player.velocity);
-		}		
+			FlxAngle.rotatePoint(_player.speed, 0, 0, 0, mA, _player.velocity);
+		}
 	}
 	
 	/**
