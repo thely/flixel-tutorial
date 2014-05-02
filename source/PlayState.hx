@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
@@ -68,6 +69,8 @@ class PlayState extends FlxState
 					mA -= 45;
 				else if (_right)
 					mA += 45;
+					
+				_player.facing = FlxObject.UP;
 			}
 			else if (_down)
 			{
@@ -76,11 +79,19 @@ class PlayState extends FlxState
 					mA += 45;
 				else if (_right)
 					mA -= 45;
+				
+				_player.facing = FlxObject.DOWN;
 			}
 			else if (_left)
+			{
 				mA = 180;
+				_player.facing = FlxObject.LEFT;
+			}
 			else if (_right)
+			{
 				mA = 0;
+				_player.facing = FlxObject.RIGHT;
+			}
 				
 			FlxAngle.rotatePoint(_player.Speed, 0, 0, 0, mA, _player.velocity);
 		}		
