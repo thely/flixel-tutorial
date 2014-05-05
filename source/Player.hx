@@ -19,6 +19,10 @@ class Player extends FlxSprite
 		animation.add("u", [3, 2], 6, false);
 		animation.add("d", [5, 4], 6, false);
 		drag.x = drag.y = 1600;
+		width = 8;
+		height = 14;
+		offset.x = 4;
+		offset.y = 2;
 		
 	}
 	
