@@ -28,6 +28,7 @@ class PlayState extends FlxState
 	private var _grpCoins:FlxTypedGroup<Coin>;
 	private var _grpEnemies:FlxTypedGroup<Enemy>;
 	
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
