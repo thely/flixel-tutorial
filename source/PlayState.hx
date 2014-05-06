@@ -152,9 +152,8 @@ class PlayState extends FlxState
 		super.update();
 		
 		FlxG.collide(_player, _mWalls);
-		FlxG.collide(_grpEnemies, _mWalls);
 		FlxG.overlap(_player, _grpCoins, playerTouchCoin);
-		
+		FlxG.collide(_grpEnemies, _mWalls);
 		checkEnemyVision();
 		
 		

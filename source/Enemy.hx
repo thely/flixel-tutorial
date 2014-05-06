@@ -61,6 +61,7 @@ class Enemy extends FlxSprite
 			{
 				_moveDir = FlxRandom.intRanged(0, 8) * 45;
 				FlxAngle.rotatePoint(speed * .5, 0, 0, 0, _moveDir, velocity);
+				
 			}
 			_idleTmr = FlxRandom.intRanged(1, 4);			
 		}
@@ -86,6 +87,22 @@ class Enemy extends FlxSprite
 	{
 		if (velocity.x != 0 || velocity.y != 0)
 		{
+			
+			if (Math.abs(velocity.x) > Math.abs(velocity.y))
+			{
+				if (velocity.x < 0)
+					facing = FlxObject.LEFT;
+				else
+					facing = FlxObject.RIGHT;
+			}
+			else
+			{
+				if (velocity.y < 0)
+					facing = FlxObject.UP;
+				else
+					facing = FlxObject.DOWN;
+			}
+			
 			switch(facing)
 			{
 				case FlxObject.LEFT, FlxObject.RIGHT:
