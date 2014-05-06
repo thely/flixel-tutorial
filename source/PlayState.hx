@@ -26,6 +26,7 @@ class PlayState extends FlxState
 	private var _map:FlxOgmoLoader;
 	private var _mWalls:FlxTilemap;
 	private var _grpCoins:FlxTypedGroup<Coin>;
+	private var _grpEnemies:FlxTypedGroup<Enemy>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -41,6 +42,8 @@ class PlayState extends FlxState
 		_grpCoins = new FlxTypedGroup<Coin>();
 		add(_grpCoins);
 		
+		_grpEnemies = new FlxTypedGroup<Enemy>();
+		add(_grpEnemies);
 		
 		_player = new Player();
 		
@@ -65,6 +68,10 @@ class PlayState extends FlxState
 		{
 			_grpCoins.add(new Coin(Std.parseInt(entityData.get("x")) + 4, Std.parseInt(entityData.get("y")) + 4));
 			
+		}
+		else if (entityName == "enemy")
+		{
+			_grpEnemies.add(new Enemy(Std.parseInt(entityData.get("x"))+4, Std.parseInt(entityData.get("y")), Std.parseInt(entityData.get("etype"))));
 		}
 	}
 	
@@ -145,8 +152,27 @@ class PlayState extends FlxState
 		super.update();
 		
 		FlxG.collide(_player, _mWalls);
+		FlxG.collide(_grpEnemies, _mWalls);
 		FlxG.overlap(_player, _grpCoins, playerTouchCoin);
+		
+		checkEnemyVision();
+		
+		
 	}	
+	
+	private function checkEnemyVision():Void
+	{
+		for (e in _grpEnemies.members)
+		{
+			if (_mWalls.ray(e.getMidpoint(), _player.getMidpoint()))
+			{
+				e.seesPlayer = true;
+				e.playerPos.copyFrom(_player.getMidpoint());
+			}
+			else
+				e.seesPlayer = false;
+		}
+	}
 	
 	private function playerTouchCoin(P:Player, C:Coin):Void
 	{
