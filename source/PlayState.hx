@@ -1,10 +1,13 @@
 package;
 
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup;
+import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
@@ -22,6 +25,7 @@ class PlayState extends FlxState
 	private var _player:Player;
 	private var _map:FlxOgmoLoader;
 	private var _mWalls:FlxTilemap;
+	private var _grpCoins:FlxTypedGroup<Coin>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -34,9 +38,17 @@ class PlayState extends FlxState
 		_mWalls.setTileProperties(2, FlxObject.ANY);
 		add(_mWalls);
 		
+		_grpCoins = new FlxTypedGroup<Coin>();
+		add(_grpCoins);
+		
+		
 		_player = new Player();
+		
 		_map.loadEntities(placeEntities, "entities");
+		
 		add(_player);
+		
+		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN, null, 1);
 		
 		super.create();	
 		
@@ -48,6 +60,11 @@ class PlayState extends FlxState
 		{
 			_player.x = Std.parseInt(entityData.get("x"));
 			_player.y = Std.parseInt(entityData.get("y"));
+		}
+		else if (entityName == "coin")
+		{
+			_grpCoins.add(new Coin(Std.parseInt(entityData.get("x")) + 4, Std.parseInt(entityData.get("y")) + 4));
+			
 		}
 	}
 	
@@ -128,5 +145,14 @@ class PlayState extends FlxState
 		super.update();
 		
 		FlxG.collide(_player, _mWalls);
+		FlxG.overlap(_player, _grpCoins, playerTouchCoin);
 	}	
+	
+	private function playerTouchCoin(P:Player, C:Coin):Void
+	{
+		if (P.alive && P.exists && C.alive && C.exists)
+		{
+			C.kill();
+		}
+	}
 }
