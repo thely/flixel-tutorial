@@ -27,7 +27,7 @@ class Player extends FlxSprite
 		
 	}
 	
-	private function movement():Void
+	private function updateMovement():Void
 	{
 		var _up:Bool = false;
 		var _down:Bool = false;
@@ -97,7 +97,7 @@ class Player extends FlxSprite
 	
 	override public function update():Void 
 	{
-		movement();
+		updateMovement();
 		super.update();
 	}
 	
