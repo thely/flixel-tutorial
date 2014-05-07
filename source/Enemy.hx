@@ -7,6 +7,7 @@ import flixel.util.FlxAngle;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxVelocity;
+using flixel.util.FlxSpriteUtil;
 
 class Enemy extends FlxSprite
 {
@@ -40,6 +41,8 @@ class Enemy extends FlxSprite
 	
 	override public function update():Void 
 	{
+		if (isFlickering())
+			return;
 		_brain.update();
 		super.update();
 	}
@@ -117,6 +120,15 @@ class Enemy extends FlxSprite
 		}
 			
 		super.draw();
+	}
+	
+	public function changeEnemy(EType:Int):Void
+	{
+		if (etype != EType)
+		{
+			etype = EType;
+			loadGraphic("assets/images/enemy-" + Std.string(etype) + ".png", true, 16, 16);
+		}
 	}
 	
 }
