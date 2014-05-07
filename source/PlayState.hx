@@ -30,6 +30,7 @@ class PlayState extends FlxState
 	private var _hud:HUD;
 	private var _money:Int = 0;
 	private var _health:Int = 3;
+	private var _inCombat:Bool = false;
 	
 	
 	/**
@@ -37,8 +38,8 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		_map = new FlxOgmoLoader("assets/data/room-001.oel");
-		_mWalls = _map.loadTilemap("assets/images/tiles.png", 16, 16, "walls");
+		_map = new FlxOgmoLoader(AssetPaths.room_001__oel);
+		_mWalls = _map.loadTilemap(AssetPaths.tiles__png, 16, 16, "walls");
 		_mWalls.setTileProperties(1, FlxObject.NONE);
 		_mWalls.setTileProperties(2, FlxObject.ANY);
 		add(_mWalls);
@@ -66,19 +67,21 @@ class PlayState extends FlxState
 	
 	private function placeEntities(entityName:String, entityData:Xml):Void
 	{
+		var x:Int = Std.parseInt(entityData.get("x"));
+		var y:Int = Std.parseInt(entityData.get("y"));
 		if (entityName == "player")
 		{
-			_player.x = Std.parseInt(entityData.get("x"));
-			_player.y = Std.parseInt(entityData.get("y"));
+			_player.x = x;
+			_player.y = y;
 		}
 		else if (entityName == "coin")
 		{
-			_grpCoins.add(new Coin(Std.parseInt(entityData.get("x")) + 4, Std.parseInt(entityData.get("y")) + 4));
+			_grpCoins.add(new Coin(x + 4, y + 4));
 			
 		}
 		else if (entityName == "enemy")
 		{
-			_grpEnemies.add(new Enemy(Std.parseInt(entityData.get("x"))+4, Std.parseInt(entityData.get("y")), Std.parseInt(entityData.get("etype"))));
+			_grpEnemies.add(new Enemy(x + 4, y, Std.parseInt(entityData.get("etype"))));
 		}
 	}
 	
@@ -98,12 +101,31 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-		
-		FlxG.collide(_player, _mWalls);
-		FlxG.overlap(_player, _grpCoins, playerTouchCoin);
-		FlxG.collide(_grpEnemies, _mWalls);
-		checkEnemyVision();
+
+		if (!_inCombat)
+		{
+			FlxG.collide(_player, _mWalls);
+			FlxG.overlap(_player, _grpCoins, playerTouchCoin);
+			FlxG.collide(_grpEnemies, _mWalls);
+			checkEnemyVision();
+			FlxG.overlap(_player, _grpEnemies, playerTouchEnemy);
+		}
 	}	
+	
+	private function playerTouchEnemy(P:Player, E:Enemy):Void
+	{
+		if (P.alive && P.exists && E.alive && E.exists)
+		{
+			startCombat(E);
+		}
+	}
+	
+	private function startCombat(E:Enemy):Void
+	{
+		_inCombat = true;
+		_player.active = false;
+		_grpEnemies.active = false;
+	}
 	
 	private function checkEnemyVision():Void
 	{

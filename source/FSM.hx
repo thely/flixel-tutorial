@@ -2,7 +2,7 @@ package ;
 
 class FSM
 {
-	public var activeState(null, default):Void->Void;
+	public var activeState:Void->Void;
 	
 	public function new(?InitState:Void->Void):Void
 	{

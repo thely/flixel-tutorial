@@ -8,7 +8,7 @@
 	<app preloader="flixel.system.FlxPreloader" />
 	
 	<!--The swf version should be at least 11.2 without FLX_NO_MOUSE_ADVANCED -->
-	<set name="SWF_VERSION" value="11.7" />
+	<set name="SWF_VERSION" value="11.8" />
 	
 	<!--------------------------------WINDOW SETTINGS------------------------------->
 	
@@ -16,13 +16,13 @@
 	<window width="640" height="480" fps="60" background="#000000" hardware="true" vsync="true" />
 	
 	<!--Web-specific-->
-	<window if="web"		orientation="portrait"  />
+	<window if="web" orientation="portrait"  />
 	
 	<!--Desktop-specific-->
-	<window if="desktop"	orientation="landscape" fullscreen="false" resizable="true" />
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
 	
 	<!--Mobile-specific-->
-	<window if="mobile"		orientation="landscape" fullscreen="true" width="0" height="0" />
+	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
 	
 	<!--------------------------------PATHS SETTINGS-------------------------------->
 	
@@ -34,7 +34,6 @@
 	
 	<!--------------------------------LIBRARIES------------------------------------->
 	
-	<haxelib name="openfl" />
 	<haxelib name="flixel"/>
 	
 	<!--In case you want to use the addons package-->
