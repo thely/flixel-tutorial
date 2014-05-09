@@ -15,63 +15,72 @@ using flixel.util.FlxSpriteUtil;
 class CombatHUD extends FlxTypedGroup<FlxSprite>
 {
 
-	public var e:Enemy;
-	public var playerHealth(default, null):Int;
-	public var outcome(default, null):Outcome;
+	// ** These public variables will be used after combat has finished to help tell us what happened.
+	public var e:Enemy;		// we will pass the enemy that the player touched to initialize combat, and this will let us also know which enemy to kill, etc.
+	public var playerHealth(default, null):Int;	// when combat has finished, we will need to know how much remaining health the player has
+	public var outcome(default, null):Outcome;	// when combat has finished, we will need to know if they player killed the enemy or fled
+	
+	// ** These are the sprites that we will use to show the combat hud interface
+	private var _sprBack:FlxSprite;	// this is the background sprite
+	private var _sprPlayer:Player;	// this is a sprite of the player
+	private var _sprEnemy:Enemy;	// this is a sprite of the enemy
+	
+	// ** These variables will be used to track the enemy's health
 	private var _enemyHealth:Int;
 	private var _enemyMaxHealth:Int;
+	private var _enemyHealthBar:FlxBar;	// This FlxBar will show us the enemy's current/max health
 	
-	private var _sprBack:FlxSprite;
-	private var _sprPlayer:Player;
-	private var _sprEnemy:Enemy;
+	private var _txtPlayerHealth:FlxText;	// this will show the player's current/max health
 	
-	private var _choices:Array<FlxText>;
-	private var _pointer:FlxSprite;
-	private var _damages:Array<FlxText>;
-	private var _selected:Int = 0;
-	private var _pHealth:FlxText;
-	private var _results:FlxText;
+	private var _damages:Array<FlxText>;	// This array will contain 2 FlxText objects which will appear to show damage dealt (or misses)
 	
-	private var _eBar:FlxBar;
+	private var _pointer:FlxSprite;			// This will be the pointer to show which option (Fight or Flee) the user is pointing to.
+	private var _selected:Int = 0;			// this will track which option is selected
+	private var _choices:Array<FlxText>;	// this array will contain the FlxTexts for our 2 options: Fight and Flee
 	
-	private var _alpha:Float = 0;
-	private var _wait:Bool = true;
+	private var _results:FlxText;	// this text will show the outcome of the battle for the player.
+	
+	private var _alpha:Float = 0;	// we will use this to fade in and out our combat hud
+	private var _wait:Bool = true;	// this flag will be set to true when don't want the player to be able to do anything (between turns)
 	
 	public function new() 
 	{
 		super();		
 		
+		// first, create our background. Make a black square, then draw borders onto it in white. Add it to our group.
 		_sprBack = new FlxSprite().makeGraphic(120, 120, FlxColor.WHITE);
 		_sprBack.drawRect(1, 1, 118, 44, FlxColor.BLACK);
 		_sprBack.drawRect(1, 46, 118, 73, FlxColor.BLACK);
 		_sprBack.screenCenter(true, true);
+		add(_sprBack);
 		
+		// next, make a 'dummy' player that looks like our player (but can't move) and add it.
 		_sprPlayer = new Player(_sprBack.x + 36 , _sprBack.y + 16);
 		_sprPlayer.active = false;
 		_sprPlayer.facing = FlxObject.RIGHT;
+		add(_sprPlayer);
 		
+		// do the same thing for an enemy. We'll just use enemy type 0 for now and change it later.
 		_sprEnemy = new Enemy(_sprBack.x + 76, _sprBack.y + 16, 0);
 		_sprEnemy.active = false;
 		_sprEnemy.facing = FlxObject.LEFT;
-
-		add(_sprBack);
-		add(_sprPlayer);
 		add(_sprEnemy);
 		
-		_pHealth = new FlxText(0, _sprPlayer.y + _sprPlayer.height  + 2, 0, "3 / 3", 8);
-		_pHealth.alignment = "center";
-		_pHealth.x = _sprPlayer.x + 4 - (_pHealth.width / 2);
-		add(_pHealth);
+		// setup the player's health display and add it to the group.
+		_txtPlayerHealth = new FlxText(0, _sprPlayer.y + _sprPlayer.height  + 2, 0, "3 / 3", 8);
+		_txtPlayerHealth.alignment = "center";
+		_txtPlayerHealth.x = _sprPlayer.x + 4 - (_txtPlayerHealth.width / 2);
+		add(_txtPlayerHealth);
 		
-		_eBar = new FlxBar(_sprEnemy.x - 6, _pHealth.y, FlxBar.FILL_LEFT_TO_RIGHT, 20, 10);
-		_eBar.createFilledBar(FlxColor.CRIMSON, FlxColor.YELLOW, true, FlxColor.YELLOW);
-		add(_eBar);
+		// create and add a FlxBar to show the enemy's health. We'll make it Red and Yellow.
+		_enemyHealthBar = new FlxBar(_sprEnemy.x - 6, _txtPlayerHealth.y, FlxBar.FILL_LEFT_TO_RIGHT, 20, 10);
+		_enemyHealthBar.createFilledBar(FlxColor.CRIMSON, FlxColor.YELLOW, true, FlxColor.YELLOW);
+		add(_enemyHealthBar);
 		
+		// create our choices and add them to the group.
 		_choices = new Array<FlxText>();
-		
 		_choices.push(new FlxText(_sprBack.x + 30, _sprBack.y + 48, 85, "FIGHT", 22));
 		_choices.push(new FlxText(_sprBack.x + 30, _choices[0].y + _choices[0].height +  8, 85, "FLEE", 22));
-		
 		add(_choices[0]);
 		add(_choices[1]);
 		
@@ -79,6 +88,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_pointer.visible = false;
 		add(_pointer);
 		
+		// create our damage texts. We'll make them be white text with a red shadow (so they stand out). 
 		_damages = new Array<FlxText>();
 		_damages.push(new FlxText(0,0,40));
 		_damages.push(new FlxText(0, 0, 40));
@@ -91,8 +101,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 			add(d);
 		}
 		
-		
-		
+		// create our results text object. We'll position it, but make it hidden for now.
 		_results = new FlxText(_sprBack.x + 2, _sprBack.y + 9, 116, "", 18);
 		_results.alignment = "center";
 		_results.color = FlxColor.YELLOW;
@@ -100,33 +109,51 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_results.visible = false;
 		add(_results);
 		
+		// like we did in our HUD class, we need to set the scrollFactor on each of our children objects to 0,0. We also set alpha to 0 (so we can fade this in)
 		forEach(function(spr:FlxSprite) {
 			spr.scrollFactor.set();
 			spr.alpha = 0;
 		});
 		
+		// mark this object as not active and not visible so update and draw don't get called on it until we're ready to show it.
 		active = false;
 		visible = false;
 	}
 	
-	public function initCombat(PHealth:Int, E:Enemy):Void
+	/**
+	 * This function will be called from PlayState when we want to start combat. It will setup the screen and make sure everything is ready.
+	 * @param	PlayerHealth	The amount of health the player is starting with
+	 * @param	E				This links back to the Enemy we are fighting with so we can get it's health and type (to change our sprite).
+	 */
+	public function initCombat(PlayerHealth:Int, E:Enemy):Void
 	{
-		playerHealth = PHealth;
-		updatePHealth();
-		e = E;
-		_enemyMaxHealth = _enemyHealth = (e.etype + 1) * 2;
-		_eBar.currentValue = 100;
-		_sprEnemy.changeEnemy(e.etype);
-		visible = true;
-		_pointer.visible = false;
+		playerHealth = PlayerHealth;	// we set our playerHealth variable to the value that was passed to us
+		e = E;	// set our enemy object to the one passed to us
+		
+		updatePlayerHealth();	// update the player health text
+		
+		// setup our enemy
+		_enemyMaxHealth = _enemyHealth = (e.etype + 1) * 2; // each enemy will have health based on their type: Type 0 = 2 health, type 1 = 4 health
+		_enemyHealthBar.currentValue = 100;	// the enemy's health bar starts at 100%
+		_sprEnemy.changeEnemy(e.etype);	// change our enemy's image to match their type.
+		
+		// make sure we initialize all of these before we start so nothing looks 'wrong' the second time we get 
 		_wait = true;
 		_results.text = "";
+		_pointer.visible = false;
 		_results.visible = false;
 		outcome = NONE;
 		_selected = 0;
-		FlxTween.num(0, 1, .66, { ease:FlxEase.circOut, complete:finishFadeIn }, updateAlpha);
+		
+		visible = true;	// make our hud visible (so draw gets called on it) - note, it's not active, yet!
+		
+		FlxTween.num(0, 1, .66, { ease:FlxEase.circOut, complete:finishFadeIn }, updateAlpha);	// do a numeric tween to fade in our combat hud when the tween is finished, call finishFadeIn
 	}
 	
+	/**
+	 * This function is called by our Tween to fade in/out all the items in our hud.
+	 * @param	Value
+	 */
 	private function updateAlpha(Value:Float):Void
 	{
 		_alpha = Value;
@@ -135,6 +162,9 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		});
 	}
 	
+	/**
+	 * When we've finished fading in, we set our hud to active (so it gets updates), and allow the player to interact. We show our pointer, too.
+	 */
 	private function finishFadeIn(_):Void
 	{
 		active = true;
@@ -142,27 +172,36 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_pointer.visible = true;
 	}
 	
-	
+	/**
+	 * After we fade our Hud out, we set it to not be active or visible (no update and no draw)
+	 */
 	private function finishFadeOut(_):Void
 	{
 		active = false;
 		visible = false;
 	}
 	
-	private function updatePHealth():Void
+	/**
+	 * This function is called to change the Player's health text on the screen.
+	 */
+	private function updatePlayerHealth():Void
 	{
-		_pHealth.text = Std.string(playerHealth) + " / 3";
-		_pHealth.x = _sprPlayer.x + 4 - (_pHealth.width / 2);
+		_txtPlayerHealth.text = Std.string(playerHealth) + " / 3";
+		_txtPlayerHealth.x = _sprPlayer.x + 4 - (_txtPlayerHealth.width / 2);
 	}
 	
 	override public function update():Void 
 	{
 		if (!_wait)
 		{
+			// if we're waiting, don't do any of this.
+			
+			// setup some simple flags to see which keys are pressed.
 			var _up:Bool = false;
 			var _down:Bool = false;
 			var _fire:Bool = false;
 			
+			// check to see any keys are pressed and set the cooresponding flags.
 			if (FlxG.keys.anyJustReleased(["SPACE", "X"]))
 			{
 				_fire = true;
@@ -176,12 +215,14 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 				_down = true;
 			}
 			
+			// based on which flags are set, do the specified action
 			if (_fire)
 			{
-				makeChoice();
+				makeChoice(); // when the player chooses either option, we call this function to process their selection
 			}
 			else if (_up)
 			{
+				// if the player presses up, we move the cursor up (with wrapping)
 				if (_selected == 0)
 					_selected = 1;
 				else
@@ -190,6 +231,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 			}
 			else if (_down)
 			{
+				// if the player presses down, we move the cursor down (with wrapping)
 				if (_selected == 1)
 					_selected = 0;
 				else
@@ -200,37 +242,56 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		super.update();
 	}
 	
+	/**
+	 * Call this function to place the pointer next to the currently selected choice
+	 */
 	private function movePointer():Void
 	{
 		_pointer.y = _choices[_selected].y + (_choices[_selected].height / 2) - 8;
 	}
 	
+	/**
+	 * This function will process the choice the player picked
+	 */
 	private function makeChoice():Void
 	{
-		_pointer.visible = false;
-		switch (_selected)
+		_pointer.visible = false;	// hide our pointer
+		switch (_selected)	// check which item was selected when the player picked it
 		{
 			case 0:
+				// if choice 0: FIGHT was picked...
 				
+				// ...the player attacks the enemy first
+				// they have an 85% chance to hit the enemy
 				if (FlxRandom.chanceRoll(85))
 				{
+					// if they hit, deal 1 damage to the enemy, and setup our damage indicator
 					_damages[1].text = "1";
 					_enemyHealth--;
-					_eBar.currentValue = (_enemyHealth / _enemyMaxHealth) * 100;
+					_enemyHealthBar.currentValue = (_enemyHealth / _enemyMaxHealth) * 100; // change the enemy's health bar
 				}
 				else
 				{
+					// change our damage text to show that we missed!
 					_damages[1].text = "MISS!";
 				}
+				
+				// position the damage text over the enemy, and set it's alpha to 0 but it's visible to true (so that it gets draw called on it)
 				_damages[1].x = _sprEnemy.x + 2 - (_damages[1].width / 2);
 				_damages[1].y = _sprEnemy.y + 4 - (_damages[1].height / 2);
 				_damages[1].alpha = 0;
 				_damages[1].visible = true;
 				
-				enemyAttack();
+				// if the enemy is still alive, it will swing back!
+				if (_enemyHealth > 0)
+				{
+					enemyAttack();
+				}
 				
+				// setup 2 tweens to allow the damage indicators to fade in and float up from the sprites
 				FlxTween.num(_damages[0].y, _damages[0].y - 12, 1, { ease:FlxEase.circOut}, updateDmgY);
 				FlxTween.num(0, 1, .2, { ease:FlxEase.circInOut, complete:doneDmgIn }, updateDmgAlpha);
+				
 			case 1:
 				if (FlxRandom.chanceRoll(50))
 				{
@@ -239,7 +300,6 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 					_results.visible = true;
 					_results.alpha = 0;
 					FlxTween.tween(_results, { alpha:1 }, .66, { ease:FlxEase.circInOut, complete:doneResultsIn } );
-					
 				}
 				else
 				{
@@ -258,7 +318,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		{
 			_damages[0].text = "1";
 			playerHealth--;
-			updatePHealth();
+			updatePlayerHealth();
 		}
 		else
 		{
