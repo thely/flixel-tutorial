@@ -3,7 +3,6 @@ package ;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
@@ -82,18 +81,17 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		
 		_damages = new Array<FlxText>();
 		_damages.push(new FlxText(0,0,40));
-		_damages.push(new FlxText(0,0,40));
-		_damages[0].color = FlxColor.WHITE;
-		_damages[1].color = FlxColor.WHITE;
-		_damages[0].setBorderStyle(FlxText.BORDER_SHADOW, FlxColor.RED);
-		_damages[1].setBorderStyle(FlxText.BORDER_SHADOW, FlxColor.RED);
-		_damages[0].alignment = "center";
-		_damages[1].alignment = "center";
-		_damages[0].visible = false;
-		_damages[1].visible = false;
+		_damages.push(new FlxText(0, 0, 40));
+		for (d in _damages)
+		{
+			d.color = FlxColor.WHITE;
+			d.setBorderStyle(FlxText.BORDER_SHADOW, FlxColor.RED);
+			d.alignment = "center";
+			d.visible = false;
+			add(d);
+		}
 		
-		add(_damages[0]);
-		add(_damages[1]);
+		
 		
 		_results = new FlxText(_sprBack.x + 2, _sprBack.y + 9, 116, "", 18);
 		_results.alignment = "center";
@@ -325,8 +323,6 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 			_pointer.visible = true;
 		}
 	}
-
-	
 }
 
 enum Outcome {
