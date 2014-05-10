@@ -356,7 +356,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	/**
 	 * This function is called from our Tweens to fade in/out the damage text
 	 */
-	private function updateDamgeAlpha(Value:Float):Void
+	private function updateDamageAlpha(Value:Float):Void
 	{
 		_damages[0].alpha = _damages[1].alpha = Value;
 	}
