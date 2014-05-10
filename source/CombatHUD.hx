@@ -289,12 +289,15 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 				}
 				
 				// setup 2 tweens to allow the damage indicators to fade in and float up from the sprites
-				FlxTween.num(_damages[0].y, _damages[0].y - 12, 1, { ease:FlxEase.circOut}, updateDmgY);
-				FlxTween.num(0, 1, .2, { ease:FlxEase.circInOut, complete:doneDmgIn }, updateDmgAlpha);
+				FlxTween.num(_damages[0].y, _damages[0].y - 12, 1, { ease:FlxEase.circOut}, updateDamageY);
+				FlxTween.num(0, 1, .2, { ease:FlxEase.circInOut, complete:doneDamageIn }, updateDamageAlpha);
 				
 			case 1:
+				
+				// if the player chose to FLEE, we'll give them a 50/50 chance to escape
 				if (FlxRandom.chanceRoll(50))
 				{
+					// if they succeed, we show the 'escaped' message and trigger it to fade in
 					outcome = ESCAPE;
 					_results.text = "ESCAPED!";
 					_results.visible = true;
@@ -303,49 +306,72 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 				}
 				else
 				{
+					// if they fail to escape, the enemy will get a free-swing
 					enemyAttack();
-					FlxTween.num(_damages[0].y, _damages[0].y - 12, 1, { ease:FlxEase.circOut}, updateDmgY);
-					FlxTween.num(0, 1, .2, { ease:FlxEase.circInOut, complete:doneDmgIn }, updateDmgAlpha);
+					FlxTween.num(_damages[0].y, _damages[0].y - 12, 1, { ease:FlxEase.circOut}, updateDamageY);
+					FlxTween.num(0, 1, .2, { ease:FlxEase.circInOut, complete:doneDamageIn }, updateDamageAlpha);
 				}
 		}
+		
+		// regardless of what happens, we need to set our 'wait' flag so that we can show what happened before moving on
 		_wait = true;
 	}
 	
+	/**
+	 * This function is called anytime we want the enemy to swing at the player
+	 */
 	private function enemyAttack():Void
 	{
-		FlxG.camera.flash(FlxColor.WHITE, .2);
+		// first, lets see if the enemy hits or not. We'll give him a 30% chance to hit
 		if (FlxRandom.chanceRoll(30))
 		{
+			// if we hit, flash the screen white, and deal one damage to the player - then update the player's health
+			FlxG.camera.flash(FlxColor.WHITE, .2);
 			_damages[0].text = "1";
 			playerHealth--;
 			updatePlayerHealth();
 		}
 		else
 		{
+			// if the enemy misses, show it on the screen
 			_damages[0].text = "MISS!";
 		}
 		
+		// setup the combat text to show up over the player and fade in/raise up
 		_damages[0].x = _sprPlayer.x + 2 - (_damages[0].width / 2);
 		_damages[0].y = _sprPlayer.y + 4 - (_damages[0].height / 2);
 		_damages[0].alpha = 0;
 		_damages[0].visible = true;
 	}
 	
-	private function updateDmgY(Value:Float):Void
+	/**
+	 * This function is called from our Tweens to move the damage displays up on the screen
+	 * @param	Value
+	 */
+	private function updateDamageY(Value:Float):Void
 	{
 		_damages[0].y = _damages[1].y = Value;
 	}
 	
-	private function updateDmgAlpha(Value:Float):Void
+	/**
+	 * This function is called from our Tweens to fade in/out the damage text
+	 */
+	private function updateDamgeAlpha(Value:Float):Void
 	{
 		_damages[0].alpha = _damages[1].alpha = Value;
 	}
 	
-	private function doneDmgIn(_):Void
+	/**
+	 * This function is called when our damage texts have finished fading in - it will trigger them to start fading out again, after a short delay
+	 */
+	private function doneDamageIn(_):Void
 	{
-		FlxTween.num(1, 0, .66, { ease:FlxEase.circInOut, startDelay:1, complete:doneDmgOut}, updateDmgAlpha);
+		FlxTween.num(1, 0, .66, { ease:FlxEase.circInOut, startDelay:1, complete:doneDamageOut}, updateDamageAlpha);
 	}
 	
+	/**
+	 * This function is triggered when our results text has finished fading in. If we're not defeated, we will fade out the entire HUD after a short delay
+	 */
 	private function doneResultsIn(_):Void
 	{
 		if (outcome != DEFEAT)
@@ -354,7 +380,11 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		}
 	}
 	
-	private function doneDmgOut(_):Void
+	/**
+	 * This function is triggered when the damage texts have finished fading out again. They will clear and reset them for next time. 
+	 * It will also check to see what we're supposed to do next - if the enemy is dead, we trigger victory, if the player is dead we trigger defeat, otherwise we reset for the next round.
+	 */
+	private function doneDamageOut(_):Void
 	{
 		_damages[0].visible = false;
 		_damages[1].visible = false;
@@ -363,6 +393,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		
 		if (playerHealth <= 0)
 		{
+			// if the player's health is 0, we show the defeat message on the screen and fade it in
 			outcome = DEFEAT;
 			_results.text = "DEFEAT!";
 			_results.visible = true;
@@ -371,6 +402,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		}
 		else if (_enemyHealth <= 0)
 		{
+			// if the enemy's health is 0, we show the victory message
 			outcome = VICTORY;
 			_results.text = "VICTORY!";
 			_results.visible = true;
@@ -379,12 +411,16 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		}
 		else
 		{
+			// both are still alive, so we reset and have the player pick their next action
 			_wait = false;
 			_pointer.visible = true;
 		}
 	}
 }
 
+/**
+ * This enum is used to set the valid values for our outcome variable. Outcome can only ever be one of these 4 values and we can check for these values easily once combat is concluded.
+ */
 enum Outcome {
 	NONE;
 	ESCAPE;
