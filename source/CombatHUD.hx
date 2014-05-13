@@ -374,11 +374,9 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	 */
 	private function doneResultsIn(_):Void
 	{
-		if (outcome != DEFEAT)
-		{
-			FlxTween.num(1, 0, .66, { ease:FlxEase.circOut, complete:finishFadeOut, startDelay:1 }, updateAlpha);
-		}
+		FlxTween.num(1, 0, .66, { ease:FlxEase.circOut, complete:finishFadeOut, startDelay:1 }, updateAlpha);
 	}
+	
 	
 	/**
 	 * This function is triggered when the damage texts have finished fading out again. They will clear and reset them for next time. 
