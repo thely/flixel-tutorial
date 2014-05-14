@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
@@ -37,6 +38,9 @@ class PlayState extends FlxState
 	private var _ending:Bool;
 	private var _won:Bool;
 	private var _paused:Bool;
+	
+	private var _sndCoin:FlxSound;
+	private var _sndCombat:FlxSound;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -68,6 +72,9 @@ class PlayState extends FlxState
 		
 		_combatHud = new CombatHUD();
 		add(_combatHud);
+		
+		_sndCoin = FlxG.sound.load(AssetPaths.coin__wav);
+		_sndCombat = FlxG.sound.load(AssetPaths.combat__wav);
 		
 		
 		super.create();	
@@ -108,6 +115,8 @@ class PlayState extends FlxState
 		_grpEnemies = FlxDestroyUtil.destroy(_grpEnemies);
 		_hud = FlxDestroyUtil.destroy(_hud);
 		_combatHud = FlxDestroyUtil.destroy(_combatHud);
+		_sndCoin = FlxDestroyUtil.destroy(_sndCoin);
+		_sndCombat = FlxDestroyUtil.destroy(_sndCoin);
 	}
 	
 	/**
@@ -180,6 +189,7 @@ class PlayState extends FlxState
 	
 	private function startCombat(E:Enemy):Void
 	{
+		_sndCombat.play();
 		_inCombat = true;
 		_player.active = false;
 		_grpEnemies.active = false;
@@ -204,6 +214,7 @@ class PlayState extends FlxState
 	{
 		if (P.alive && P.exists && C.alive && C.exists)
 		{
+			_sndCoin.play(true);
 			_money++;
 			_hud.updateHUD(_health, _money);
 			C.kill();

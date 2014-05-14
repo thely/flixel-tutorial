@@ -3,13 +3,16 @@ package ;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.system.FlxSound;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
+import flixel.util.FlxDestroyUtil;
 
 class Player extends FlxSprite
 {
 
 	public var speed:Float = 200;
+	private var _sndStep:FlxSound;
 	
 	public function new(X:Float=0, Y:Float=0) 
 	{
@@ -24,6 +27,8 @@ class Player extends FlxSprite
 		drag.x = drag.y = 1600;
 		setSize(8, 14);
 		offset.set(4, 2);
+		
+		_sndStep = FlxG.sound.load(AssetPaths.step__wav);
 		
 	}
 	
@@ -79,8 +84,11 @@ class Player extends FlxSprite
 			}
 			FlxAngle.rotatePoint(speed, 0, 0, 0, mA, velocity);
 		}
-		if (velocity.x != 0 || velocity.y != 0)
+		if (active && (velocity.x != 0 || velocity.y != 0))
 		{
+			
+			_sndStep.play();
+	
 			switch(facing)
 			{
 				case FlxObject.LEFT, FlxObject.RIGHT:
@@ -99,6 +107,13 @@ class Player extends FlxSprite
 	{
 		updateMovement();
 		super.update();
+	}
+	
+	override public function destroy():Void 
+	{
+		super.destroy();
+		
+		_sndStep = FlxDestroyUtil.destroy(_sndStep);
 	}
 	
 }

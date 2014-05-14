@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -16,6 +17,7 @@ class Coin extends FlxSprite
 	override public function kill():Void 
 	{
 		alive = false;
+		
 		FlxTween.tween(this, { alpha:0, y:y - 16 }, .66, {ease:FlxEase.circOut, complete:finishKill } );
 	}
 	
