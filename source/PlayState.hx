@@ -36,6 +36,7 @@ class PlayState extends FlxState
 	private var _combatHud:CombatHUD;
 	private var _ending:Bool;
 	private var _won:Bool;
+	private var _paused:Bool;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
