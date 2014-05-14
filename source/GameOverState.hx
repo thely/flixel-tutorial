@@ -113,6 +113,8 @@ class GameOverState extends FlxState
 	override public function destroy():Void 
 	{
 		super.destroy();
+		
+		// clean up all our objects!
 		_txtTitle = FlxDestroyUtil.destroy(_txtTitle);
 		_txtMessage = FlxDestroyUtil.destroy(_txtMessage);
 		_sprScore = FlxDestroyUtil.destroy(_sprScore);
