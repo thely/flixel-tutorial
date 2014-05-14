@@ -84,11 +84,10 @@ class Player extends FlxSprite
 			}
 			FlxAngle.rotatePoint(speed, 0, 0, 0, mA, velocity);
 		}
-		if (active && (velocity.x != 0 || velocity.y != 0))
+		if ((velocity.x != 0 || velocity.y != 0) && touching == FlxObject.NONE)
 		{
-			
 			_sndStep.play();
-	
+			
 			switch(facing)
 			{
 				case FlxObject.LEFT, FlxObject.RIGHT:
@@ -101,6 +100,7 @@ class Player extends FlxSprite
 					animation.play("d");
 			}
 		}
+		
 	}
 	
 	override public function update():Void 

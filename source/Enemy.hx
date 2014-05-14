@@ -51,14 +51,10 @@ class Enemy extends FlxSprite
 			return;
 		_brain.update();
 		super.update();
-		if (velocity.x != 0 || velocity.y != 0)
+		if ((velocity.x != 0 || velocity.y != 0) && touching == FlxObject.NONE)
 		{
-			if (touching == FlxObject.NONE)
-			{
-				_point = getMidpoint();
-				_sndStep.setPosition(_point.x, _point.y);
-				_sndStep.play();
-			}
+			_sndStep.setPosition(x+(width/2), y+height);
+			_sndStep.play();
 		}
 	}
 	
@@ -104,7 +100,7 @@ class Enemy extends FlxSprite
 	
 	override public function draw():Void 
 	{
-		if (active && (velocity.x != 0 || velocity.y != 0))
+		if ((velocity.x != 0 || velocity.y != 0) && touching != FlxObject.NONE)
 		{
 			
 			if (Math.abs(velocity.x) > Math.abs(velocity.y))
