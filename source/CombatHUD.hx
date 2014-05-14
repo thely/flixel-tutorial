@@ -9,6 +9,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxRandom;
 using flixel.util.FlxSpriteUtil;
 
@@ -414,7 +415,24 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 			_pointer.visible = true;
 		}
 	}
+	
+	override public function destroy():Void 
+	{
+		super.destroy();
+		
+		e = FlxDestroyUtil.destroy(e);
+		_sprBack = FlxDestroyUtil.destroy(_sprBack);
+		_sprPlayer = FlxDestroyUtil.destroy(_sprPlayer);
+		_sprEnemy = FlxDestroyUtil.destroy(_sprEnemy);
+		_enemyHealthBar = FlxDestroyUtil.destroy(_enemyHealthBar);
+		_txtPlayerHealth = FlxDestroyUtil.destroy(_txtPlayerHealth);
+		_damages = FlxDestroyUtil.destroyArray(_damages);
+		_pointer = FlxDestroyUtil.destroy(_pointer);
+		_choices = FlxDestroyUtil.destroyArray(_choices);
+		_results = FlxDestroyUtil.destroy(_results);
+	}
 }
+
 
 /**
  * This enum is used to set the valid values for our outcome variable. Outcome can only ever be one of these 4 values and we can check for these values easily once combat is concluded.
