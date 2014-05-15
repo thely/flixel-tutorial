@@ -51,6 +51,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	private var _sndMiss:FlxSound;
 	private var _sndSelect:FlxSound;
 	private var _sndWin:FlxSound;
+	private var _sndCombat:FlxSound;
 	
 	public function new() 
 	{
@@ -134,7 +135,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_sndMiss = FlxG.sound.load(AssetPaths.miss__wav);
 		_sndSelect = FlxG.sound.load(AssetPaths.select__wav);
 		_sndWin = FlxG.sound.load(AssetPaths.win__wav);
-		
+		_sndCombat = FlxG.sound.load(AssetPaths.combat__wav);
 		
 	}
 	
@@ -145,6 +146,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	 */
 	public function initCombat(PlayerHealth:Int, E:Enemy):Void
 	{
+		_sndCombat.play();
 		playerHealth = PlayerHealth;	// we set our playerHealth variable to the value that was passed to us
 		e = E;	// set our enemy object to the one passed to us
 		
@@ -467,7 +469,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_sndMiss = FlxDestroyUtil.destroy(_sndMiss);
 		_sndSelect = FlxDestroyUtil.destroy(_sndSelect);
 		_sndWin = FlxDestroyUtil.destroy(_sndWin);
-		
+		_sndCombat = FlxDestroyUtil.destroy(_sndCoin);
 	}
 }
 

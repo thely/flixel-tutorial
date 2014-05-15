@@ -40,7 +40,6 @@ class PlayState extends FlxState
 	private var _paused:Bool;
 	
 	private var _sndCoin:FlxSound;
-	private var _sndCombat:FlxSound;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -74,7 +73,6 @@ class PlayState extends FlxState
 		add(_combatHud);
 		
 		_sndCoin = FlxG.sound.load(AssetPaths.coin__wav);
-		_sndCombat = FlxG.sound.load(AssetPaths.combat__wav);
 		
 		
 		super.create();	
@@ -116,7 +114,6 @@ class PlayState extends FlxState
 		_hud = FlxDestroyUtil.destroy(_hud);
 		_combatHud = FlxDestroyUtil.destroy(_combatHud);
 		_sndCoin = FlxDestroyUtil.destroy(_sndCoin);
-		_sndCombat = FlxDestroyUtil.destroy(_sndCoin);
 	}
 	
 	/**
@@ -189,7 +186,6 @@ class PlayState extends FlxState
 	
 	private function startCombat(E:Enemy):Void
 	{
-		_sndCombat.play();
 		_inCombat = true;
 		_player.active = false;
 		_grpEnemies.active = false;
