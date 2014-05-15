@@ -469,7 +469,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_sndMiss = FlxDestroyUtil.destroy(_sndMiss);
 		_sndSelect = FlxDestroyUtil.destroy(_sndSelect);
 		_sndWin = FlxDestroyUtil.destroy(_sndWin);
-		_sndCombat = FlxDestroyUtil.destroy(_sndCoin);
+		_sndCombat = FlxDestroyUtil.destroy(_sndCombat);
 	}
 }
 
