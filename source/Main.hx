@@ -2,6 +2,7 @@ package;
 
 import flash.display.Sprite;
 import flash.display.StageAlign;
+import flash.display.StageDisplayState;
 import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.Lib;
@@ -19,6 +20,8 @@ class Main extends Sprite
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
+	
+	var tmp:Bool = false;
 	
 	// You can pretty much ignore everything from here on - your code should go in your states.
 	
@@ -50,12 +53,12 @@ class Main extends Sprite
 		
 		setupGame();
 	}
-	
+
 	private function setupGame():Void
 	{
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
-
+		
 		if (zoom == -1)
 		{
 			var ratioX:Float = stageWidth / gameWidth;
@@ -64,17 +67,28 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}		
-
-		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
-		
 		var _save:FlxSave = new FlxSave();
 		_save.bind("flixel-tutorial");
+		#if desktop
+		if (_save.data.fullscreen != null)
+		{
+			startFullscreen = _save.data.fullscreen;
+		}
+		#end
+
+		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
+
 		if (_save.data.volume != null)
 		{
 			FlxG.sound.volume = _save.data.volume;
 		}
 		_save.close();
-		
+
+		#if flash
 		FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__mp3, 1, true);
+		#else
+		FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__ogg, 1, true);
+		#end
+
 	}
 }

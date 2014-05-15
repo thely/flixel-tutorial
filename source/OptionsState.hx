@@ -21,6 +21,9 @@ class OptionsState extends FlxState
 	private var _btnVolumeUp:FlxButton;
 	private var _btnClearData:FlxButton;
 	private var _btnBack:FlxButton;
+	#if desktop
+	private var _btnFullScreen:FlxButton;
+	#end
 	
 	// a save object for saving settings
 	private var _save:FlxSave;
@@ -61,6 +64,12 @@ class OptionsState extends FlxState
 		_txtVolumeAmt.screenCenter(true, false);
 		add(_txtVolumeAmt);
 		
+		#if desktop
+		_btnFullScreen = new FlxButton(0, _barVolume.y + _barVolume.height + 8, FlxG.fullscreen ? "FULLSCREEN" : "WINDOWED", clickFullscreen);
+		_btnFullScreen.screenCenter(true, false);
+		add(_btnFullScreen);
+		#end
+		
 		_btnClearData = new FlxButton((FlxG.width / 2) - 90, FlxG.height - 28, "Clear Data", clickClearData);
 		_btnClearData.onUp.sound = FlxG.sound.load(AssetPaths.select__wav);
 		add(_btnClearData);
@@ -78,6 +87,15 @@ class OptionsState extends FlxState
 		
 		super.create();
 	}
+	
+	#if desktop
+	private function clickFullscreen():Void
+	{
+		FlxG.fullscreen = !FlxG.fullscreen;
+		_btnFullScreen.text = FlxG.fullscreen ? "FULLSCREEN" : "WINDOWED";
+		_save.data.fullscreen = FlxG.fullscreen;
+	}
+	#end
 	
 	/**
 	 * The user wants to clear the saved data - we just call erase on our save object and then reset the volume to .5
@@ -142,5 +160,8 @@ class OptionsState extends FlxState
 		_btnClearData = FlxDestroyUtil.destroy(_btnClearData);
 		_btnBack = FlxDestroyUtil.destroy(_btnBack);
 		_save = null;
+		#if desktop
+		_btnFullScreen = FlxDestroyUtil.destroy(_btnFullScreen);
+		#end
 	}
 }

@@ -2,7 +2,7 @@
 <project>
 	<!------------------------------APPLICATION SETTINGS---------------------------->
 	
-	<app title="FlixelTut" file="FlixelTut" main="Main" version="0.0.1" company="HaxeFlixel" />
+	<app title="FlixelTut" file="FlixelTut" main="Main" version="0.0.1" company="HaxeFlixel" package="com.haxeflixel.tutorial" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file, or you can set the actual size of your file manually at "Flxpreloader-onUpdate-bytesTotal"!-->
 	<app preloader="flixel.system.FlxPreloader" />
@@ -30,7 +30,12 @@
 	<classpath name="source" />
 	
 	<!--You can use rename="newName" to shorten the paths to individual subdirectories!-->
-	<assets path="assets" />
+	<assets path="assets/data" include="*.oel|*.oep" />
+	<assets path="assets/images" include="*.png" />
+	<assets path="assets/sounds" include="*.wav" />
+	<assets path="assets/music" include="*.mp3" if="flash" />
+	<assets path="assets/music" include="*.ogg" unless="flash" />
+	
 	
 	<!--------------------------------LIBRARIES------------------------------------->
 	
@@ -60,10 +65,10 @@
 	<!-- <haxedef name="FLX_NO_NATIVE_CURSOR" /> -->
 	
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
-	<!--<haxedef name="FLX_NO_MOUSE" if="mobile" />-->
-	<!--<haxedef name="FLX_NO_KEYBOARD" if="mobile" />-->
-	<!--<haxedef name="FLX_NO_TOUCH" if="desktop" />-->
-	<!--<haxedef name="FLX_NO_GAMEPAD" />-->
+	<haxedef name="FLX_NO_MOUSE" if="mobile" />
+	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
+	<haxedef name="FLX_NO_TOUCH" if="desktop" />
+	<haxedef name="FLX_NO_GAMEPAD"/>
 	
 	<!--Disable the Flixel core sound tray-->
 	<!--<haxedef name="FLX_NO_SOUND_TRAY" />-->
@@ -76,4 +81,6 @@
 	
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+	<haxedef name="FLX_NO_DEBUG" if="mobile" />
+	
 </project>

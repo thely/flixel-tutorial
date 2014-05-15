@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.system.FlxSound;
+import flixel.ui.FlxButton;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
@@ -39,10 +40,18 @@ class Player extends FlxSprite
 		var _left:Bool = false;
 		var _right:Bool = false;
 		
+		#if !FLX_NO_KEYBOARD
 		_up = FlxG.keys.anyPressed(["UP", "W"]);
 		_down = FlxG.keys.anyPressed(["DOWN", "S"]);
 		_left = FlxG.keys.anyPressed(["LEFT", "A"]);
 		_right = FlxG.keys.anyPressed(["RIGHT", "D"]);
+		#end
+		#if mobile
+		_up = PlayState.virtualPad.buttonUp.status == FlxButton.PRESSED;
+		_down = PlayState.virtualPad.buttonDown.status == FlxButton.PRESSED;
+		_left  = PlayState.virtualPad.buttonLeft.status == FlxButton.PRESSED;
+		_right = PlayState.virtualPad.buttonRight.status == FlxButton.PRESSED;
+		#end
 		
 		if (_up && _down)
 			_up = _down = false;

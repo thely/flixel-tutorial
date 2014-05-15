@@ -1,5 +1,6 @@
 package;
 
+import flash.system.System;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -18,13 +19,16 @@ class MenuState extends FlxState
 	private var _txtTitle:FlxText;
 	private var _btnOptions:FlxButton;
 	private var _btnPlay:FlxButton;
+	#if desktop
+	private var _btnExit:FlxButton;
+	#end
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
-		_txtTitle = new FlxText(20, 0, 0, "HaxeFlixel\nTutorial\nGame", 22);
+		_txtTitle = new FlxText(0, 20, 0, "HaxeFlixel\nTutorial\nGame", 22);
 		_txtTitle.alignment = "center";
 		_txtTitle.screenCenter(true, false);
 		add(_txtTitle);
@@ -41,8 +45,21 @@ class MenuState extends FlxState
 		_btnOptions.onUp.sound = FlxG.sound.load(AssetPaths.select__wav);
 		add(_btnOptions);
 		
+		#if desktop
+		_btnExit = new FlxButton(FlxG.width - 28, 8, "X", clickExit);
+		_btnExit.loadGraphic(AssetPaths.button__png, true, 20, 20);
+		add(_btnExit);
+		#end
+		
 		super.create();
 	}
+	
+	#if desktop
+	private function clickExit():Void
+	{
+		System.exit(0);
+	}
+	#end
 	
 	private function clickPlay():Void
 	{
@@ -64,6 +81,9 @@ class MenuState extends FlxState
 		_txtTitle = FlxDestroyUtil.destroy(_txtTitle);
 		_btnPlay = FlxDestroyUtil.destroy(_btnPlay);
 		_btnOptions = FlxDestroyUtil.destroy(_btnOptions);
+		#if desktop
+		_btnExit = FlxDestroyUtil.destroy(_btnExit);
+		#end
 	}
 
 	/**
