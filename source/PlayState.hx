@@ -83,6 +83,8 @@ class PlayState extends FlxState
 		add(virtualPad);
 		#end
 		
+		FlxG.camera.fade(FlxColor.BLACK, .33, true);
+		
 		super.create();	
 		
 	}
@@ -156,7 +158,7 @@ class PlayState extends FlxState
 				if (_combatHud.outcome == DEFEAT)
 				{
 					_ending = true;
-					FlxG.camera.fade(FlxColor.BLACK, .66, false, doneFadeOut);
+					FlxG.camera.fade(FlxColor.BLACK, .33, false, doneFadeOut);
 				}
 				else
 				{
@@ -167,7 +169,7 @@ class PlayState extends FlxState
 						{
 							_won = true;
 							_ending = true;
-							FlxG.camera.fade(FlxColor.BLACK, .66, false, doneFadeOut);
+							FlxG.camera.fade(FlxColor.BLACK, .33, false, doneFadeOut);
 						}
 					}
 					else 
@@ -187,7 +189,9 @@ class PlayState extends FlxState
 	
 	private function doneFadeOut():Void 
 	{
+		
 		FlxG.switchState(new GameOverState(_won, _money));
+		
 	}
 	
 	private function playerTouchEnemy(P:Player, E:Enemy):Void

@@ -29,9 +29,10 @@ class GameOverState extends FlxState
 	 */
 	public function new(Win:Bool, Score:Int) 
 	{
-		super();
 		_win = Win;
 		_score = Score;
+		super();
+		
 	}
 	
 	override public function create():Void 
@@ -70,6 +71,8 @@ class GameOverState extends FlxState
 		_btnMainMenu.onUp.sound = FlxG.sound.load(AssetPaths.select__wav);
 		add(_btnMainMenu);
 		
+		FlxG.camera.fade(FlxColor.BLACK, .33, true);
+		
 		super.create();
 	}
 	
@@ -106,7 +109,7 @@ class GameOverState extends FlxState
 	 */
 	private function goMainMenu():Void
 	{
-		FlxG.camera.fade(FlxColor.BLACK, .66, false, function() {
+		FlxG.camera.fade(FlxColor.BLACK, .33, false, function() {
 			FlxG.switchState(new MenuState());
 		});
 	}

@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -320,6 +321,9 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 				{
 					// if they hit, deal 1 damage to the enemy, and setup our damage indicator
 					_damages[1].text = "1";
+					FlxTween.tween(_sprEnemy, { x:_sprEnemy.x + 4 }, .1, { complete: function(_) {
+						FlxTween.tween(_sprEnemy, { x:_sprEnemy.x - 4 }, .1);
+					}} );
 					_sndHurt.play();
 					_enemyHealth--;
 					_enemyHealthBar.currentValue = (_enemyHealth / _enemyMaxHealth) * 100; // change the enemy's health bar
@@ -383,6 +387,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		{
 			// if we hit, flash the screen white, and deal one damage to the player - then update the player's health
 			FlxG.camera.flash(FlxColor.WHITE, .2);
+			FlxG.camera.shake(0.01, 0.2);
 			_sndHurt.play();
 			_damages[0].text = "1";
 			playerHealth--;
