@@ -53,7 +53,7 @@ class Enemy extends FlxSprite
 		super.update();
 		if ((velocity.x != 0 || velocity.y != 0) && touching == FlxObject.NONE)
 		{
-			_sndStep.setPosition(x + (width / 2), y + height);
+			_sndStep.setPosition(x + _halfWidth, y + height);
 			_sndStep.play();
 		}
 	}

@@ -68,7 +68,7 @@ class PlayState extends FlxState
 		
 		add(_player);
 		
-		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN, null, 1);
+		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN, 1);
 		
 		_hud = new HUD();
 		add(_hud);
@@ -144,7 +144,7 @@ class PlayState extends FlxState
 			FlxG.collide(_player, _mWalls);
 			FlxG.overlap(_player, _grpCoins, playerTouchCoin);
 			FlxG.collide(_grpEnemies, _mWalls);
-			checkEnemyVision();
+			_grpEnemies.forEachAlive(checkEnemyVision);
 			FlxG.overlap(_player, _grpEnemies, playerTouchEnemy);
 		}
 		else
@@ -209,18 +209,15 @@ class PlayState extends FlxState
 		#end
 	}
 	
-	private function checkEnemyVision():Void
+	private function checkEnemyVision(e:Enemy):Void
 	{
-		for (e in _grpEnemies.members)
+		if (_mWalls.ray(e.getMidpoint(), _player.getMidpoint()))
 		{
-			if (_mWalls.ray(e.getMidpoint(), _player.getMidpoint()))
-			{
-				e.seesPlayer = true;
-				e.playerPos.copyFrom(_player.getMidpoint());
-			}
-			else
-				e.seesPlayer = false;
+			e.seesPlayer = true;
+			e.playerPos.copyFrom(_player.getMidpoint());
 		}
+		else
+			e.seesPlayer = false;		
 	}
 	
 	private function playerTouchCoin(P:Player, C:Coin):Void
