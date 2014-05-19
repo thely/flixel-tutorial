@@ -3,6 +3,7 @@ package;
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageDisplayState;
+import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.Lib;
@@ -56,6 +57,9 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		Lib.current.stage.quality = StageQuality.LOW;
+		
+		
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 		

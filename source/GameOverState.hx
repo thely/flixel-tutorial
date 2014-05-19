@@ -38,6 +38,10 @@ class GameOverState extends FlxState
 	override public function create():Void 
 	{
 		
+		#if !FLX_NO_MOUSE
+		FlxG.mouse.visible = true;
+		#end
+		
 		// create and add each of our items
 		
 		_txtTitle = new FlxText(0, 20, 0, _win ? "You Win!" : "Game Over!", 22);

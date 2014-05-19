@@ -1,5 +1,8 @@
 package ;
 
+import flash.geom.Matrix;
+import flash.geom.Point;
+import flixel.addons.effects.FlxWaveSprite;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -12,7 +15,9 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
+import flash.filters.ColorMatrixFilter;
 using flixel.util.FlxSpriteUtil;
 
 class CombatHUD extends FlxTypedGroup<FlxSprite>
@@ -54,9 +59,16 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	private var _sndWin:FlxSound;
 	private var _sndCombat:FlxSound;
 	
+	private var _sprScreen:FlxSprite;
+	private var _sprWave:FlxWaveSprite;
+	
 	public function new() 
 	{
 		super();		
+		
+		_sprScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT);
+		_sprWave = new FlxWaveSprite(_sprScreen, WaveMode.ALL, 4, -1, 4);
+		add(_sprWave);
 		
 		// first, create our background. Make a black square, then draw borders onto it in white. Add it to our group.
 		_sprBack = new FlxSprite().makeGraphic(120, 120, FlxColor.WHITE);
@@ -147,6 +159,18 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	 */
 	public function initCombat(PlayerHealth:Int, E:Enemy):Void
 	{
+		#if flash
+		_sprScreen.pixels.copyPixels(FlxG.camera.buffer, FlxG.camera.buffer.rect, new Point());
+		#else
+		_sprScreen.pixels.draw(FlxG.camera.canvas, new Matrix(1, 0, 0, 1, 0, 0));
+		#end
+		var rc:Float = 1 / 3;
+		var gc:Float = 1 / 2;
+		var bc:Float = 1 / 6;
+		_sprScreen.pixels.applyFilter(_sprScreen.pixels, _sprScreen.pixels.rect, new Point(), new ColorMatrixFilter([rc, gc, bc, 0, 0, rc, gc, bc, 0, 0, rc, gc, bc, 0, 0, 0, 0, 0, 1, 0]));
+		_sprScreen.resetFrameBitmapDatas();
+		_sprScreen.dirty = true;
+		
 		_sndCombat.play();
 		playerHealth = PlayerHealth;	// we set our playerHealth variable to the value that was passed to us
 		e = E;	// set our enemy object to the one passed to us
@@ -170,6 +194,7 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		visible = true;	// make our hud visible (so draw gets called on it) - note, it's not active, yet!
 		
 		FlxTween.num(0, 1, .66, { ease:FlxEase.circOut, complete:finishFadeIn }, updateAlpha);	// do a numeric tween to fade in our combat hud when the tween is finished, call finishFadeIn
+		
 	}
 	
 	/**

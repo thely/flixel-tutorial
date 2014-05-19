@@ -50,6 +50,10 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
+		#if !FLX_NO_MOUSE
+		FlxG.mouse.visible = false;
+		#end
+		
 		_map = new FlxOgmoLoader(AssetPaths.room_001__oel);
 		_mWalls = _map.loadTilemap(AssetPaths.tiles__png, 16, 16, "walls");
 		_mWalls.setTileProperties(1, FlxObject.NONE);
