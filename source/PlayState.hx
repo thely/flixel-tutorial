@@ -108,7 +108,7 @@ class PlayState extends FlxState
 		_hud = FlxDestroyUtil.destroy(_hud);
 		_combatHud = FlxDestroyUtil.destroy(_combatHud);
 	}
-	
+
 	/**
 	 * Function that is called once every frame.
 	 */
