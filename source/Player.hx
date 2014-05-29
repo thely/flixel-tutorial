@@ -22,9 +22,9 @@ class Player extends FlxSprite
 		loadGraphic(AssetPaths.player__png, true, 16, 16);
 		setFacingFlip(FlxObject.LEFT, false, false);
 		setFacingFlip(FlxObject.RIGHT, true, false);
-		animation.add("lr", [1, 0], 6, false);
-		animation.add("u", [3, 2], 6, false);
-		animation.add("d", [5, 4], 6, false);
+		animation.add("d", [0, 1, 0, 2], 6, false);
+		animation.add("lr", [3, 4, 3, 5], 6, false);
+		animation.add("u", [6, 7, 6, 8], 6, false);
 		drag.x = drag.y = 1600;
 		setSize(8, 14);
 		offset.set(4, 2);
@@ -33,7 +33,7 @@ class Player extends FlxSprite
 		
 	}
 	
-	private function updateMovement():Void
+	private function movement():Void
 	{
 		var _up:Bool = false;
 		var _down:Bool = false;
@@ -114,7 +114,7 @@ class Player extends FlxSprite
 	
 	override public function update():Void 
 	{
-		updateMovement();
+		movement();
 		super.update();
 	}
 	
@@ -124,5 +124,6 @@ class Player extends FlxSprite
 		
 		_sndStep = FlxDestroyUtil.destroy(_sndStep);
 	}
+	
 	
 }
