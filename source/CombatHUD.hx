@@ -66,12 +66,14 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		
 		// next, make a 'dummy' player that looks like our player (but can't move) and add it.
 		_sprPlayer = new Player(_sprBack.x + 36 , _sprBack.y + 16);
+		_sprPlayer.animation.frameIndex = 3;
 		_sprPlayer.active = false;
 		_sprPlayer.facing = FlxObject.RIGHT;
 		add(_sprPlayer);
 		
 		// do the same thing for an enemy. We'll just use enemy type 0 for now and change it later.
 		_sprEnemy = new Enemy(_sprBack.x + 76, _sprBack.y + 16, 0);
+		_sprEnemy.animation.frameIndex = 3;
 		_sprEnemy.active = false;
 		_sprEnemy.facing = FlxObject.LEFT;
 		add(_sprEnemy);
