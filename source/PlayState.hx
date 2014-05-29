@@ -126,7 +126,7 @@ class PlayState extends FlxState
 		virtualPad = FlxDestroyUtil.destroy(virtualPad);
 		#end
 	}
-	
+
 	/**
 	 * Function that is called once every frame.
 	 */
