@@ -125,5 +125,4 @@ class Player extends FlxSprite
 		_sndStep = FlxDestroyUtil.destroy(_sndStep);
 	}
 	
-	
 }
