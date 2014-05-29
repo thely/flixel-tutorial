@@ -137,6 +137,7 @@ class OptionsState extends FlxState
 		_btnVolumeUp = FlxDestroyUtil.destroy(_btnVolumeUp);
 		_btnClearData = FlxDestroyUtil.destroy(_btnClearData);
 		_btnBack = FlxDestroyUtil.destroy(_btnBack);
-		_save = FlxDestroyUtil.destroy(_save);
+		_save.destroy();
+		_save = null;
 	}
 }
