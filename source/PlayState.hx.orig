@@ -60,13 +60,22 @@ class PlayState extends FlxState
 	{
 		super.destroy();
 	}
+<<<<<<< HEAD
+
+=======
+>>>>>>> Part-IV
 	
 	/**
 	 * Function that is called once every frame.
 	 */
 	override public function update():Void
 	{
+<<<<<<< HEAD
+=======
 
+>>>>>>> Part-IV
+		super.update();
+		
 		FlxG.collide(_player, _mWalls);
 	}	
 }
