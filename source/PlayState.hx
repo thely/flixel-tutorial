@@ -77,7 +77,6 @@ class PlayState extends FlxState
 	{
 		super.destroy();
 	}
-
 	/**
 	 * Function that is called once every frame.
 	 */
