@@ -4,20 +4,13 @@ import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
-import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.system.FlxSound;
-import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
-import flixel.ui.FlxButton;
 import flixel.ui.FlxVirtualPad;
-import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
-import flixel.util.FlxMath;
-import flixel.util.FlxPoint;
 using flixel.util.FlxSpriteUtil;
 
 /**
@@ -25,7 +18,6 @@ using flixel.util.FlxSpriteUtil;
  */
 class PlayState extends FlxState
 {
-	
 	private var _player:Player;
 	private var _map:FlxOgmoLoader;
 	private var _mWalls:FlxTilemap;
@@ -193,9 +185,7 @@ class PlayState extends FlxState
 	
 	private function doneFadeOut():Void 
 	{
-		
 		FlxG.switchState(new GameOverState(_won, _money));
-		
 	}
 	
 	private function playerTouchEnemy(P:Player, E:Enemy):Void

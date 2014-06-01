@@ -1,9 +1,9 @@
-package ;
+package;
 
+import flash.filters.ColorMatrixFilter;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flixel.addons.effects.FlxWaveSprite;
-import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -15,14 +15,11 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
-import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
-import flash.filters.ColorMatrixFilter;
 using flixel.util.FlxSpriteUtil;
 
 class CombatHUD extends FlxTypedGroup<FlxSprite>
 {
-
 	// ** These public variables will be used after combat has finished to help tell us what happened.
 	public var e:Enemy;		// we will pass the enemy that the player touched to initialize combat, and this will let us also know which enemy to kill, etc.
 	public var playerHealth(default, null):Int;	// when combat has finished, we will need to know how much remaining health the player has
@@ -328,7 +325,6 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 	private function movePointer():Void
 	{
 		_pointer.y = _choices[_selected].y + (_choices[_selected].height / 2) - 8;
-		
 	}
 	
 	/**
@@ -467,7 +463,6 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		FlxTween.num(1, 0, .66, { ease:FlxEase.circOut, complete:finishFadeOut, startDelay:1 }, updateAlpha);
 	}
 	
-	
 	/**
 	 * This function is triggered when the damage texts have finished fading out again. They will clear and reset them for next time. 
 	 * It will also check to see what we're supposed to do next - if the enemy is dead, we trigger victory, if the player is dead we trigger defeat, otherwise we reset for the next round.
@@ -515,7 +510,6 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 		_sprBack = FlxDestroyUtil.destroy(_sprBack);
 		_sprPlayer = FlxDestroyUtil.destroy(_sprPlayer);
 		_sprEnemy = FlxDestroyUtil.destroy(_sprEnemy);
-		_enemyHealthBar = FlxDestroyUtil.destroy(_enemyHealthBar);
 		_txtPlayerHealth = FlxDestroyUtil.destroy(_txtPlayerHealth);
 		_damages = FlxDestroyUtil.destroyArray(_damages);
 		_pointer = FlxDestroyUtil.destroy(_pointer);
@@ -534,7 +528,8 @@ class CombatHUD extends FlxTypedGroup<FlxSprite>
 
 
 /**
- * This enum is used to set the valid values for our outcome variable. Outcome can only ever be one of these 4 values and we can check for these values easily once combat is concluded.
+ * This enum is used to set the valid values for our outcome variable.
+ * Outcome can only ever be one of these 4 values and we can check for these values easily once combat is concluded.
  */
 enum Outcome {
 	NONE;

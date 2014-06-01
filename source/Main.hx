@@ -22,8 +22,6 @@ class Main extends Sprite
 	var skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 	
-	var tmp:Bool = false;
-	
 	// You can pretty much ignore everything from here on - your code should go in your states.
 	
 	public static function main():Void
@@ -87,12 +85,5 @@ class Main extends Sprite
 			FlxG.sound.volume = _save.data.volume;
 		}
 		_save.close();
-
-		#if flash
-		FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__mp3, 1, true);
-		#else
-		FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__ogg, 1, true);
-		#end
-
 	}
 }

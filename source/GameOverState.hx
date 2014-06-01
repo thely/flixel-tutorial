@@ -21,7 +21,6 @@ class GameOverState extends FlxState
 	private var _txtHiScore:FlxText;	// text to show the hi-score
 	private var _btnMainMenu:FlxButton;	// button to go to main menu
 	
-	
 	/**
 	 * Called from PlayState, this will set our win and score variables
 	 * @param	Win		true if the player beat the boss, false if they died
@@ -32,7 +31,6 @@ class GameOverState extends FlxState
 		_win = Win;
 		_score = Score;
 		super();
-		
 	}
 	
 	override public function create():Void 
@@ -129,5 +127,4 @@ class GameOverState extends FlxState
 		_txtScore = FlxDestroyUtil.destroy(_txtScore);
 		_btnMainMenu = FlxDestroyUtil.destroy(_btnMainMenu);
 	}
-	
 }

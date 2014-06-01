@@ -1,4 +1,4 @@
-package ;
+package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -7,7 +7,6 @@ import flixel.tweens.FlxTween;
 
 class Coin extends FlxSprite
 {
-
 	public function new(X:Float=0, Y:Float=0) 
 	{
 		super(X, Y);
@@ -25,8 +24,4 @@ class Coin extends FlxSprite
 	{
 		exists = false;
 	}
-	
-	
-	
-	
 }

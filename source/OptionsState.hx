@@ -1,4 +1,4 @@
-package ;
+package;
 
 import flixel.FlxG;
 import flixel.FlxState;
@@ -156,7 +156,6 @@ class OptionsState extends FlxState
 		
 		// cleanup all our objects!
 		_txtTitle = FlxDestroyUtil.destroy(_txtTitle);
-		_barVolume = FlxDestroyUtil.destroy(_barVolume);
 		_txtVolume = FlxDestroyUtil.destroy(_txtVolume);
 		_txtVolumeAmt = FlxDestroyUtil.destroy(_txtVolumeAmt);
 		_btnVolumeDown = FlxDestroyUtil.destroy(_btnVolumeDown);

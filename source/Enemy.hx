@@ -1,4 +1,4 @@
-package ;
+package;
 
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -93,10 +93,8 @@ class Enemy extends FlxSprite
 		else
 		{
 			FlxVelocity.moveTowardsPoint(this, playerPos, Std.int(speed));
-			
 		}
 	}
-	
 	
 	override public function draw():Void 
 	{
@@ -149,5 +147,4 @@ class Enemy extends FlxSprite
 		
 		_sndStep = FlxDestroyUtil.destroy(_sndStep);
 	}
-	
 }

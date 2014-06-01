@@ -29,6 +29,15 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
+		if (FlxG.sound.music == null) // don't restart the music if it's alredy playing
+		{
+			#if flash
+			FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__mp3, 1, true);
+			#else
+			FlxG.sound.playMusic(AssetPaths.HaxeFlixel_Tutorial_Game__ogg, 1, true);
+			#end
+		}
+		
 		_txtTitle = new FlxText(0, 20, 0, "HaxeFlixel\nTutorial\nGame", 22);
 		_txtTitle.alignment = "center";
 		_txtTitle.screenCenter(true, false);
@@ -66,14 +75,14 @@ class MenuState extends FlxState
 	
 	private function clickPlay():Void
 	{
-		FlxG.camera.fade(FlxColor.BLACK,.33, false,function() {
+		FlxG.camera.fade(FlxColor.BLACK,.33, false, function() {
 			FlxG.switchState(new PlayState());
 		});
 	}
 	
 	private function clickOptions():Void
 	{
-		FlxG.camera.fade(FlxColor.BLACK,.33, false,function() {
+		FlxG.camera.fade(FlxColor.BLACK,.33, false, function() {
 			FlxG.switchState(new OptionsState());
 		});
 	}
@@ -92,12 +101,4 @@ class MenuState extends FlxState
 		_btnExit = FlxDestroyUtil.destroy(_btnExit);
 		#end
 	}
-
-	/**
-	 * Function that is called once every frame.
-	 */
-	override public function update():Void
-	{
-		super.update();
-	}	
 }

@@ -1,4 +1,4 @@
-package ;
+package;
 
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -11,7 +11,6 @@ import flixel.util.FlxDestroyUtil;
 
 class Player extends FlxSprite
 {
-
 	public var speed:Float = 200;
 	private var _sndStep:FlxSound;
 	
@@ -30,7 +29,6 @@ class Player extends FlxSprite
 		offset.set(4, 2);
 		
 		_sndStep = FlxG.sound.load(AssetPaths.step__wav);
-		
 	}
 	
 	private function movement():Void
@@ -93,6 +91,7 @@ class Player extends FlxSprite
 			}
 			FlxAngle.rotatePoint(speed, 0, 0, 0, mA, velocity);
 		}
+		
 		if ((velocity.x != 0 || velocity.y != 0) && touching == FlxObject.NONE)
 		{
 			_sndStep.play();
@@ -124,5 +123,4 @@ class Player extends FlxSprite
 		
 		_sndStep = FlxDestroyUtil.destroy(_sndStep);
 	}
-	
 }

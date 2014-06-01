@@ -1,9 +1,7 @@
-package ;
+package;
 
-import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
@@ -11,7 +9,6 @@ using flixel.util.FlxSpriteUtil;
 
 class HUD extends FlxTypedGroup<FlxSprite>
 {
-	
 	private var _sprBack:FlxSprite;
 	private var _txtHealth:FlxText;
 	private var _txtMoney:FlxText;
@@ -41,15 +38,10 @@ class HUD extends FlxTypedGroup<FlxSprite>
 		});
 	}
 	
-	
-	
 	public function updateHUD(Health:Int = 0, Money:Int = 0):Void
 	{
 		_txtHealth.text = Std.string(Health) + " / 3";
 		_txtMoney.text = Std.string(Money);
 		_txtMoney.x = _sprMoney.x - _txtMoney.width - 4;
 	}
-	
-	
-	
 }
